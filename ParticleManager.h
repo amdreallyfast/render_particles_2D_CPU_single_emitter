@@ -17,7 +17,8 @@ class ParticleManager
 {
 public:
     ParticleManager();
-    void Init(unsigned int programId, 
+    ~ParticleManager();
+    void Init(unsigned int programId,
         unsigned int numParticles, 
         unsigned int maxParticlesEmittedPerFrame,
         const glm::vec2 center,

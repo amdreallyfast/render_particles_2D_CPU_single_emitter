@@ -38,60 +38,8 @@
 #include "GenerateShader.h"
 #include "ParticleManager.h"
 
-//#include "ShaderStorage.h"
-//
-//// for drawing shapes
-//#include "GeometryData.h"
-//#include "PrimitiveGeneration.h"
-//
-//// for particles
-//#include "ParticleRegionCircle.h"
-//#include "ParticleRegionPolygon.h"
-//#include "ParticleEmitterPoint.h"
-//#include "ParticleEmitterBar.h"
-//#include "ParticleStorage.h"
-//#include "ParticleUpdater.h"
-//
-//// for moving the shapes around in window space
-//#include "glm/gtc/matrix_transform.hpp"
-//#include "glm/gtc/type_ptr.hpp"
-//
-//// in a bigger program, ??where would this be stored??
-//ShaderStorage gShaderStorage;
-//// in a bigger program, this would be stored in some kind of shader storage
-////GLuint gProgramId;
-//
-//// in a bigger program, uniform locations would probably be stored in the same place as the 
-//// shader programs
-//GLint gUnifMatrixTransform;
-//
-//// in a bigger program, geometry data would be stored in some kind of "scene" or in a renderer
-//// or behind door number 3 so that collision boxes could get at the vertex data
-//GeometryData gCircleGeometry;
-//GeometryData gPolygonGeometry;
-//
-//// in a bigger program, this would somehow be encapsulated and associated with both the circle
-//// geometry and the circle particle region, and ditto for the polygon
-//glm::mat4 gCircleTranslateMatrix;
-//glm::mat4 gPolygonTranslateMatrix;
-//
-//// in a bigger program, ??where would particle stuff be stored??
-//// Note: I made the updater only use one region and one emitter.  I suggest that there only ever
-//// be 1 region per updater, but my code can be adapted to use multiple emitters.
-//IParticleRegion *gpParticleRegionCircle;
-//IParticleEmitter *gpParticleEmitterForCircle;
-//ParticleUpdater gParticleUpdaterForCircle;
-//
-//IParticleRegion *gpParticleRegionPolygon;
-//IParticleEmitter *gpParticleEmitterForPolygon;
-//ParticleUpdater gParticleUpdaterForPolygon;
-//
-//// divide between the circle and the polygon regions
-//const unsigned int MAX_PARTICLE_COUNT = 10000;
-//ParticleStorage gParticleStorage;
 
 ParticleManager gParticleManager;
-
 
 
 /*-----------------------------------------------------------------------------------------------
@@ -122,9 +70,9 @@ void Init()
 
     // all values are in windows space (X and Y limited to [-1,+1])
     unsigned int totalParticles = 10000;
-    unsigned int maxParticlesEmittedPerFrame = 10;
+    unsigned int maxParticlesEmittedPerFrame = 200;
     glm::vec2 center = glm::vec2(+0.3f, +0.3f);
-    float radius = 0.25f;
+    float radius = 0.75f;
     float minVelocity = 0.2f;
     float maxVelocity = 0.6f;
     gParticleManager.Init(particleProgramId,
@@ -134,80 +82,6 @@ void Init()
         radius, 
         minVelocity, 
         maxVelocity);
-
-    ////gProgramId = GenerateShaderProgram();
-    //gShaderStorage.NewShader("particles");
-    //gShaderStorage.AddShaderFile("particles", "shaderParticle.vert", GL_VERTEX_SHADER);
-    //gShaderStorage.AddShaderFile("particles", "shaderParticle.frag", GL_FRAGMENT_SHADER);
-    //gShaderStorage.LinkShader("particles");
-    //GLuint particleProgramId = gShaderStorage.GetShaderProgram("particles");
-
-    ////gUnifMatrixTransform = glGetUniformLocation(gProgramId, "translateMatrixWindowSpace");
-
-    //gCircleTranslateMatrix = glm::translate(glm::mat4(), glm::vec3(+0.3f, +0.3f, 0.0f));
-    //CreateCircularParticleThing(gCircleTranslateMatrix, particleProgramId);
-
-    //gPolygonTranslateMatrix = glm::translate(glm::mat4(), glm::vec3(-0.3f, -0.3f, 0.0f));
-    //CreatePolygonParticleThing(gPolygonTranslateMatrix, particleProgramId);
-
-    ////// make a circle and a bar particle emitter inside it
-    ////// - circle geometry for drawing a circle
-    ////// - circle particle region of same size
-    ////// 
-    ////GenerateCircle(&gCircleGeometry);   // hard coded radius of 0.25f
-    ////gCircleGeometry.Init(gProgramId);
-    ////glm::vec4 circleCenter(+0.0f, +0.0f, +0.0f, 1.0f);  // 1.0f makes it translatable
-    ////gCircleTranslateMatrix = glm::translate(glm::mat4(), glm::vec3(+0.3f, +0.3f, 0.0f));
-    ////circleCenter = gCircleTranslateMatrix * circleCenter;
-    ////gpParticleRegion1 = new ParticleRegionCircle(
-    ////    glm::vec2(circleCenter.x, circleCenter.y), 0.25f);
-    ////glm::vec2 barP1 = 
-    ////gpParticleEmitter1 = new ParticleEmitterBar
-
-    //    //GenerateCircle(&gCircle);
-
-    //// this is a hack, but it correctly moves the particle region's boundaries to match where 
-    //// the shape will be drawn 
-    ////std::vector<glm::vec2> polygonCorners;
-    ////polygonCorners.push_back(glm::vec2(-0.25f, -0.5f));
-    ////polygonCorners.push_back(glm::vec2(+0.25f, -0.5f));
-    ////polygonCorners.push_back(glm::vec2(+0.5f, +0.25f));
-    ////polygonCorners.push_back(glm::vec2(-0.5f, +0.25f));
-    ////gPolygonTranslateMatrix = glm::translate(glm::mat4(), glm::vec3(-0.3f, -0.3f, 0.0f));
-    ////for (size_t i = 0; i < polygonCorners.size(); i++)
-    ////{
-    ////    // translate the polygon's corners
-    ////    // Note: glm::translate only spits out a mat4, so the vec2 has to be made into a 
-    ////    // translatable vec4 (the 1.0f at the end makes it translatable), transformed, then 
-    ////    // turned back into a vec2;
-    ////    glm::vec4 v4 = glm::vec4(polygonCorners[i], 0.0f, 1.0f);
-    ////    v4 = gPolygonTranslateMatrix * v4;
-    ////    polygonCorners[i] = glm::vec2(v4.x, v4.y);
-    ////}
-    ////gpParticleRegion = new ParticleRegionPolygon(polygonCorners);
-
-
-    //////GeneratePolygonWireframe(&gPolygon, polygonCorners, false);
-
-    //////InitializeGeometry(gProgramId, &gPolygon);
-    //////InitializeGeometry(gProgramId, &gCircle);
-
-    ////// make a point emitter at the center of a circular region of the same location and size as 
-    ////// the circle primitive (currently (7-4-2016) hard-coded as 0.25 radius)
-
-    ////gpParticleEmitter = new ParticleEmitterPoint(glm::vec2(+0.0f, +0.0f), 0.1f, 0.5f);
-    ////gpParticleEmitter = new ParticleEmitterBar(glm::vec2(-0.2f, -0.25f), glm::vec2(+0.15, +0.2f), glm::vec2(-0.1f, -0.6f), 0.1f, 0.5f);
-
-
-    //gParticleStorage.Init(particleProgramId, MAX_PARTICLE_COUNT);
-    //gParticleUpdaterForCircle.SetRegion(gpParticleRegionCircle);
-    //gParticleUpdaterForCircle.SetEmitter(gpParticleEmitterForCircle, 10);
-
-    //// start all particles at the emitter's orign
-    //for (size_t particleCount = 0; particleCount < MAX_PARTICLE_COUNT; particleCount++)
-    //{
-    //    gpParticleEmitterForCircle->ResetParticle(&(gParticleStorage._allParticles[particleCount]));
-    //}
 }
 
 /*-----------------------------------------------------------------------------------------------
@@ -228,58 +102,11 @@ void Display()
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // in the absence of an actual timer, use a hard-coded value
+    // in the absence of an actual timer, use a hard-coded delta time
     gParticleManager.Update(0.01f);
+
+    // this handles its own bindings and cleans up when it is done
     gParticleManager.Render();
-
-    //glm::mat4 translateMatrix;
-
-    //gParticleUpdaterForCircle.Update(gParticleStorage._allParticles, 0, 
-    //    gParticleStorage._allParticles.size(), 0.01f);
-
-    //GLuint particleProgramId = gShaderStorage.GetShaderProgram("particles");
-    //glUseProgram(particleProgramId);
-
-    //static unsigned int frameCounter = 0;
-    //frameCounter++;
-    //if (frameCounter % 100 == 0)
-    //{
-    //    printf("frame count = %d\n", frameCounter);
-    //}
-
-    //// put the circle up and to the right
-    //// Note: Remember that this program is "barebones", so translation must be in window space 
-    //// ([-1,+1] on X and Y).
-    //translateMatrix = glm::translate(glm::mat4(), glm::vec3(+0.3f, +0.3f, 0.0f));
-    //glUniformMatrix4fv(gUnifMatrixTransform, 1, GL_FALSE, glm::value_ptr(translateMatrix));
-    //glBindVertexArray(gCircle._vaoId);
-    //glDrawElements(gCircle._drawStyle, gCircle._indices.size(), GL_UNSIGNED_SHORT, 0);
-
-    //// put the polygon down and to the left
-    //translateMatrix = glm::translate(glm::mat4(), glm::vec3(-0.3f, -0.3f, 0.0f));
-    //glUniformMatrix4fv(gUnifMatrixTransform, 1, GL_FALSE, glm::value_ptr(translateMatrix));
-    //glBindVertexArray(gPolygon._vaoId);
-    //glDrawElements(gPolygon._drawStyle, gPolygon._indices.size(), GL_UNSIGNED_SHORT, 0);
-
-    //glBindVertexArray(gParticleStorage._vaoId);
-    //glBindBuffer(GL_ARRAY_BUFFER, gParticleStorage._arrayBufferId);
-    //glBufferSubData(GL_ARRAY_BUFFER, 0, gParticleStorage._sizeBytes, gParticleStorage._allParticles.data());
-    //glDrawArrays(gParticleStorage._drawStyle, 0, gParticleStorage._allParticles.size());
-
-
-
-    // TODO: remove everything from this project that has to do with textures; they aren't used in this demo
-
-
-
-
-    // clean up bindings
-    // Note: Don't bother going through each texture unit and unbinding it.  While unbinding is
-    // a good preactice, texture units are an exception.  Texture switching means that the 
-    // texture cache is no longer valid, so whatever GPU processors are handling the texture 
-    // will experience cache misses until the cache "warms up" again.  Lesson: Make as few 
-    // texture switches as possible.
-    //glUseProgram(0);
 
     // tell the GPU to swap out the displayed buffer with the one that was just rendered
     glutSwapBuffers();
@@ -390,27 +217,6 @@ Creator:    John Cox (2-13-2016)
 void CleanupAll()
 {
     gParticleManager.Cleanup();
-    //gShaderStorage.DeleteProgram("particles");
-
-    //// these deletion functions need the buffer ID, but they take a (void *) for the second 
-    //// argument in the event that the user has an array of IDs (legacy OpenGL stuff that isn't 
-    //// used much anymore, if at all), so pass in the buffer ID's address and tell it to delete 1
-    //// Note: The second argument is treated like an array, so if I were to pass in the address 
-    //// of a single GLuint and tell it to delete 2, then it will either (1) blow up or 
-    //// (2) silently delete something I didn't want.  Both are bad, so treat it nice.
-    //// Also Note: If I attempt to delete an ID that has already been deleted, that is ok.  OpenGL
-    //// will silently swallow that.
-    //glDeleteBuffers(1, &gCircleGeometry._arrayBufferId);
-    //glDeleteBuffers(1, &gCircleGeometry._elementBufferId);
-    //glDeleteVertexArrays(1, &gCircleGeometry._vaoId);
-    //glDeleteBuffers(1, &gPolygonGeometry._arrayBufferId);
-    //glDeleteBuffers(1, &gPolygonGeometry._elementBufferId);
-    //glDeleteVertexArrays(1, &gPolygonGeometry._vaoId);
-
-    //delete(gpParticleRegionCircle);
-    //delete(gpParticleRegionPolygon);
-    //delete(gpParticleEmitterForCircle);
-    //delete(gpParticleEmitterForPolygon);
 }
 
 /*-----------------------------------------------------------------------------------------------

@@ -5,11 +5,44 @@
 #include "glload/include/glload/gl_4_4.h"
 
 
+/*-----------------------------------------------------------------------------------------------
+Description:
+    An empty constructor.  It exists because I didn't know if anything had to go in it, and then
+    I kept it around even when everything was moved to the Init(...) method.
+Parameters: None
+Returns:    None
+Exception:  Safe
+Creator:    John Cox (7-26-2016)
+-----------------------------------------------------------------------------------------------*/
 ParticleManager::ParticleManager()
 {
 
 }
 
+/*-----------------------------------------------------------------------------------------------
+Description:
+    Calls Cleanup() in the event that the user forgot to call it themselves.
+Parameters: None
+Returns:    None
+Exception:  Safe
+Creator:    John Cox (7-30-2016)
+-----------------------------------------------------------------------------------------------*/
+ParticleManager::~ParticleManager()
+{
+    this->Cleanup();
+}
+
+/*-----------------------------------------------------------------------------------------------
+Description:
+    As the name suggests, this deletes the shader program, vertex buffer, and VAO associated 
+    with this object.  Is called in the constructor in the event that someone forgot to call it 
+    explicitly.  This method exists so that the user can reset it without deleting the actual 
+    object (??why would you want to do this??) .
+Parameters: None
+Returns:    None
+Exception:  Safe
+Creator:    John Cox (7-26-2016)
+-----------------------------------------------------------------------------------------------*/
 void ParticleManager::Cleanup()
 {
     glDeleteProgram(_programId);
@@ -17,7 +50,25 @@ void ParticleManager::Cleanup()
     glDeleteVertexArrays(1, &_vaoId);
 }
 
-void ParticleManager::Init(unsigned int programId, 
+/*-----------------------------------------------------------------------------------------------
+Description:
+    Records the program ID, the maximum number of particles to be emitted per frame, and the 
+    emitter center.  Re-sizes the internal collection of particles to accomodate the specified 
+    number.  Calculates the boundary at which particles become invalid based on the provided 
+    radius.  Calculates the velocity delta from the provided min and max velocities.
+Parameters: 
+    programId       The shader program must be constructed prior to this.
+    numParticles    The maximum number of particles that the manager has to work with.
+    maxParticlesEmittedPerFrame     Self-explanatory.
+    center          A 2D vector in window coordinates (X and Y bounded by [-1,+1]).
+    radius          In window coords.  
+    minVelocity     In window coords.
+    maxVelocity     In window coords.
+Returns:    None
+Exception:  Safe
+Creator:    John Cox (7-26-2016)
+-----------------------------------------------------------------------------------------------*/
+void ParticleManager::Init(unsigned int programId,
     unsigned int numParticles, 
     unsigned int maxParticlesEmittedPerFrame,
     const glm::vec2 center,
@@ -117,7 +168,6 @@ void ParticleManager::Update(float deltaTimeSec)
     unsigned int emitCounter = 0;
     for (size_t particleIndex = 0; particleIndex < _allParticles.size(); particleIndex++)
     {
-
         Particle &particleRef = _allParticles[particleIndex];
         if (this->OutOfBounds(particleRef))
         {
@@ -197,9 +247,8 @@ void ParticleManager::ResetParticle(Particle *resetThis) const
 
 /*-----------------------------------------------------------------------------------------------
 Description:
-    Generates a new velocity vector between the previously provided minimum and maximum values
-    (or 0 if nothing was set after this object was instatiated) and in the provided direction
-    (or a random direction if no direction was set).
+    Generates a new velocity vector between the previously provided minimum and maximum values 
+    and in the provided direction.
 Parameters: None
 Returns:    
     A 2D vector whose magnitude is between the initialized "min" and "max" values and whose
