@@ -263,6 +263,8 @@ glm::vec2 ParticleManager::GetNewVelocityVector() const
     float velocityMagnitude = _velocityMin + velocityVariation;
 
     // this demo particle "manager" emits in a circle, so get a random 2D direction
+    // Note: The hard-coded mod100 is just to prevent the random axis magnitudes from 
+    // getting too crazy different from each other.
     float newX = (float)(RandomPosAndNeg() % 100);
     float newY = (float)(RandomPosAndNeg() % 100);
     glm::vec2 randomVelocityVector = glm::normalize(glm::vec2(newX, newY));
