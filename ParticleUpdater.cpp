@@ -53,7 +53,7 @@ Description:
     the provided delta time.
 Parameters:
     particleCollection  The particle collection that will be updated.
-    startIndex          Used in case the user wanted to adapat the updater to use multiple 
+    startIndex          Used in case the user wanted to adapt the updater to use multiple 
                         emitters and then wanted to split the number of particles between these 
                         emitters.
     numToUpdate         Same idea as "start index".

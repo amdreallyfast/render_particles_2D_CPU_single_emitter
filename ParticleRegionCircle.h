@@ -3,7 +3,6 @@
 #include "IParticleRegion.h"
 #include "glm/vec2.hpp"
 #include "Particle.h"
-#include <vector>
 
 /*-----------------------------------------------------------------------------------------------
 Description:

@@ -32,9 +32,7 @@
     </ClCompile>
     <ClCompile Include="MinMaxVelocity.cpp" />
     <ClCompile Include="RandomToast.cpp" />
-    <ClCompile Include="ShaderStorage.cpp">
-      <Filter>Shaders</Filter>
-    </ClCompile>
+    <ClCompile Include="ParticleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGlErrorHandling.h" />
@@ -62,9 +60,6 @@
     <ClInclude Include="GenerateShader.h">
       <Filter>Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderStorage.h">
-      <Filter>Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleRegionCircle.h">
       <Filter>Particles</Filter>
     </ClInclude>
@@ -79,6 +74,7 @@
     </ClInclude>
     <ClInclude Include="MinMaxVelocity.h" />
     <ClInclude Include="RandomToast.h" />
+    <ClInclude Include="ParticleManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaderGeometry.frag" />
