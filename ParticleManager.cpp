@@ -226,7 +226,6 @@ bool ParticleManager::OutOfBounds(const Particle &p) const
     {
         return false;
     }
-
 }
 
 /*-----------------------------------------------------------------------------------------------
@@ -241,7 +240,16 @@ Creator:    John Cox (7-2-2016)
 -----------------------------------------------------------------------------------------------*/
 void ParticleManager::ResetParticle(Particle *resetThis) const
 {
-    resetThis->_position = _center;
+    // give the position a little variation (hard coded 0.1f in window space) to give it some 
+    // flavor around the origin
+    // Note: The hard-coded mod100 is just to prevent the random axis magnitudes from 
+    // getting too crazy different from each other.
+    float radiusVariation = RandomOnRange0to1() * 0.1f;
+    float newX = (float)(RandomPosAndNeg() % 100);
+    float newY = (float)(RandomPosAndNeg() % 100);
+    glm::vec2 randomVector = glm::normalize(glm::vec2(newX, newY));
+    resetThis->_position = _center + (randomVector * radiusVariation);
+
     resetThis->_velocity = this->GetNewVelocityVector();
 }
 
