@@ -69,7 +69,11 @@ void Init()
     GLuint particleProgramId = GenerateShaderProgram();
 
     // all values are in windows space (X and Y limited to [-1,+1])
-    // Note: Toy with the values as desired.  This demo shows the single-threaded, CPU-driven program (8-6-2016: I am running an Intel Core i7-2630QM, which is the quad-core, mobile version for a laptop) struggling around 30k particles, while the GPU version (8-6-2016: Running a GTX 560M, which is the mobile version for a laptop) of the program isn't breaking a sweat.
+    // Note: Toy with the values as desired.  This demo shows the single-threaded, 
+    // CPU-driven program (8-6-2016: I am running an Intel Core i7-2630QM, which is the 
+    // quad-core, mobile version for a laptop) struggling around 30k particles, while the GPU 
+    // version (8-6-2016: Running a GTX 560M, which is the mobile version for a laptop) of the 
+    // program isn't breaking a sweat.
     unsigned int totalParticles = 30000;    // 
     unsigned int maxParticlesEmittedPerFrame = 200;
     glm::vec2 center = glm::vec2(+0.3f, +0.3f);
